@@ -50,6 +50,11 @@ public class RigidBody {
         double cross = rx * jy - ry * jx;
         omega += cross * invInertia;
     }
+    public void inelasticCollision() {
+        vx = 0;
+        vy = 0;
+        omega = 0;
+    }
 
     public double getX() { return x; }
     public double getY() { return y; }

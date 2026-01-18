@@ -4,6 +4,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import org.example.domino.model.DominoBody;
+import org.example.domino.simulation.DominoSimulation;
 import org.example.domino.simulation.World;
 
 
@@ -26,9 +27,9 @@ public class WorldView {
         gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
 
         drawGround();
-        for (DominoBody d : world.getDominos()){
-            drawDomino(d);
-            if (SHOW_COM) drawCOM(d);
+        for (DominoSimulation d : world.getDominoSimulations()){
+            drawDomino(d.getBody());
+            if (SHOW_COM) drawCOM(d.getBody());
         }
     }
 
