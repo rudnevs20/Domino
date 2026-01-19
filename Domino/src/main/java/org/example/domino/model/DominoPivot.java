@@ -41,7 +41,7 @@ public class DominoPivot {
     }
     public void setByBlBr(double floorY) {
         double[] bl = body.worldCornerBL();
-        double[] br = body.worldCornerBL();
+        double[] br = body.worldCornerBR();
 
         x = (bl[0] + br[0]) * 0.5;
         y = floorY;
@@ -49,7 +49,7 @@ public class DominoPivot {
     }
     public void setByBrTr(double floorY) {
         double[] tr = body.worldCornerTR();
-        double[] br = body.worldCornerBL();
+        double[] br = body.worldCornerBR();
 
         x = (tr[0] + br[0]) * 0.5;
         y = floorY;

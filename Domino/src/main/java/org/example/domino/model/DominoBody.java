@@ -52,6 +52,14 @@ public class DominoBody extends RigidBody {
         double s = Math.sin(angle);
         return this.y + (localX * s + localY * c);
     }
+    public double[][] getWorldCorners() {
+        return new double[][]{
+                worldCornerBL(),
+                worldCornerBR(),
+                worldCornerTR(),
+                worldCornerTL()
+        };
+    }
     // ===================================================================================
     // ==================== World point of 4 corners (bl, br, tr, tl) Körpergrenze =======
     // ===================================================================================
@@ -89,4 +97,29 @@ public class DominoBody extends RigidBody {
     }
     // ===================================================================================
     // ===================================================================================
+    public double[][] getLocalCorner() { return localCorner; }
+
+    /**
+     * Prüft, ob der Punkt (px, py) innerhalb des Dominosteins liegt.
+     * Einschränkung: Nur ein Rechteck mit Ecken und einem Schwerpunkt.
+     */
+    public boolean containsWorldPoint(double px, double py) {
+        double cx = this.getX();
+        double cy = this.getY();
+        double angle = this.getAngle();
+
+        double s = Math.sin(-angle);
+        double c = Math.cos(-angle);
+
+        double dx = px - cx;
+        double dy = py - cy;
+
+        double localX = dx * c - dy * s;
+        double localY = dx * s + dy * c;
+
+        double halfW = this.getWidth() / 2.0;
+        double halfH = this.getHeight() / 2.0;
+
+        return (localX >= -halfW && localX <= halfW) && (localY >= -halfH && localY <= halfH);
+    }
 }

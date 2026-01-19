@@ -5,33 +5,37 @@ package org.example.domino.model;
  * Physik-Koordinaten: y nach oben positiv.
  */
 public class RigidBody {
-
+    // Schwerpunkt
     protected double x;
     protected double y;
     protected double angle;
-
+    // Geschwindigkeit
     protected double vx;
     protected double vy;
+    // Winkelgeschwindigkeit
+    // omega > 0 gegen den Uhrzeigersinn
+    // omega < 0 im Uhrzeigersinn
     protected double omega;
 
     protected double mass;
-    protected double invMass;
-
+    protected double invMass;// m^-1
+    // Trägheitsmoment
     protected double inertia;
-    protected double invInertia;
+    protected double invInertia;// J^-1
 
     // ===== Impuls- und Punktgeschwindigkeit (für Kontakt/Physik) =====
 
     //Geschwindigkeit eines Punkts am Körper
-    public double velAtPointX(double px, double py) {
-        double rx = px - x;
-        double ry = py - y;
-        return vx - omega * ry;
+    public double[] velAtPointXY(double px, double py) {
+        return new double[]{velAtPointX(px, py), velAtPointY(px, py)};
     }
-
+    public double velAtPointX(double px, double py) {
+        double ry = py - y;
+        return vx - omega * ry *0.25;
+    }
     public double velAtPointY(double px, double py) {
         double rx = px - x;
-        return vy + omega * rx;
+        return vy + omega * rx*0.25;
     }
 
     // Impuls am Schwerpunkt
@@ -49,11 +53,6 @@ public class RigidBody {
         // r x J
         double cross = rx * jy - ry * jx;
         omega += cross * invInertia;
-    }
-    public void inelasticCollision() {
-        vx = 0;
-        vy = 0;
-        omega = 0;
     }
 
     public double getX() { return x; }
@@ -77,4 +76,16 @@ public class RigidBody {
     public void setVx(double vx) { this.vx = vx; }
     public void setVy(double vy) { this.vy = vy; }
     public void setOmega(double omega) { this.omega = omega; }
+
+    @Override
+    public String toString() {
+        return "RigidBody{" +
+                "x=" + x +
+                ", y=" + y +
+                ", angle=" + angle +
+                ", vx=" + vx +
+                ", vy=" + vy +
+                ", omega=" + omega +
+                '}';
+    }
 }
