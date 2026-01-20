@@ -69,6 +69,12 @@ public class World {
             double[] hit = before.collisionDetection(next);
 
             if (hit != null) {
+
+                DominoSimulation last = dominoSimulations.get(dominoSimulations.size()-1);
+                if(started && last.isOnFloor()){
+                    before.deactivate();
+                }
+
                 DominoBody A = before.getBody();
                 DominoBody B = next.getBody();
 
@@ -127,10 +133,6 @@ public class World {
                 System.out.println("Before: " + A);
                 // alter Domino verliert seinen Schwung
                 before.inelasticCollision();
-                DominoSimulation last = dominoSimulations.get(dominoSimulations.size()-1);
-                if(started && last.isOnFloor()){
-                    before.deactivate();
-                }
 
                 // (C) nächster Domino wird aktiv, kriegt Impuls, Pivot neu setzen
 //                next.giveTopLeftImpulse(jx);
