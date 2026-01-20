@@ -10,7 +10,7 @@ public class World {
     public static final double GROUND_Y = 60.0;
     public static final double GROUND_X = 300.0;
 
-    private static final double ABSTAND = 60.0;
+    private static final double ABSTAND = 50.0;
 
     private List<DominoSimulation> dominoSimulations = new ArrayList<>();
 
@@ -76,9 +76,16 @@ public class World {
                 double nx = hit[1]; // collision normal
                 double ny = hit[2]; // collision normal
 
+                //Normal muss von before zu next zeigen”, sonst schiebst du beim Penetration-Resolve manchmal in die falsche Richtung
+                double dx = B.getX() - A.getX();
+                double dy = B.getY() - A.getY();
+                if (dx * nx + dy * ny < 0) {
+                    nx = -nx;
+                    ny = -ny;
+                }
                 // Einfachere Version TR of before oder BL of next
                 double[] collisionPoint = before.getCollisionPoints(next);
-                if(collisionPoint == null) return;
+                if(collisionPoint == null) continue;
                 double cx = collisionPoint[0]; // collision point
                 double cy = collisionPoint[1]; // collision point
 
@@ -87,20 +94,26 @@ public class World {
                 double vAy = A.velAtPointY(cx, cy);
 
                 // ---------- Projektion der Geschwindigkeit auf die Normale ----------
-                double vRel = vAx * nx + vAy * ny;
+                double vBx = B.velAtPointX(cx, cy);
+                double vBy = B.velAtPointY(cx, cy);
+
+                double rvx = vAx - vBx;
+                double rvy = vAy - vBy;
+
+                double vRel = rvx * nx + rvy * ny;
 
                 System.out.println("vAx: " + vAx + " vAy: " + vAy + " vRel: " + vRel + " nx=" + nx + " ny=" + ny + " overlap: " + penetration);
                 System.out.println("Punkt: cx= " + cx + " cy=" + cy);
 
                 // (A) Clamp: ein kleines Stück zurück, damit er nicht "durchdringt"
-                before.resolvePenetration(nx, ny, penetration);
+                before.clampAngleAgainst(next);
 
                 // Ist das positiv, hat bereits eine Kollision stattgefunden;
                 // ist es negativ, steht ein Dominoeffekt kurz bevor
-                if (vRel <= 0) return;
+                if (vRel <= 0) continue;
                 // Wenn der Auftreffpunkt unterhalb der Mitte liegt,
                 // erfolgt die Rotation von unten nach oben
-                if(cy<=B.getY()) return;
+                if(cy<=B.getY()) continue;
 
 
                 // (B) Energie-basierte Übergabe: p = Anteil der Rotationsenergie, die weitergeht
@@ -114,6 +127,10 @@ public class World {
                 System.out.println("Before: " + A);
                 // alter Domino verliert seinen Schwung
                 before.inelasticCollision();
+                DominoSimulation last = dominoSimulations.get(dominoSimulations.size()-1);
+                if(started && last.isOnFloor()){
+                    before.deactivate();
+                }
 
                 // (C) nächster Domino wird aktiv, kriegt Impuls, Pivot neu setzen
 //                next.giveTopLeftImpulse(jx);

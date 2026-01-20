@@ -256,14 +256,18 @@ public class DominoSimulation {
         body.setOmega(0);
     }
 
-    public void resolvePenetration(double nx, double ny, double depth) {
+    public void resolvePenetration(DominoSimulation next, double nx, double ny, double depth) {
         DominoBody A = this.getBody();
+        DominoBody B = this.getBody();
         double slop = 0.0001;
 
         double correction = Math.max(depth - slop, 0.0);
 
-        A.setX(A.getX() - nx * correction);
-        A.setY(A.getY() - ny * correction);
+        A.setX(A.getX() - nx * correction * 0.5);
+        A.setY(A.getY() - ny * correction * 0.5);
+
+        B.setX(B.getX() + nx * correction * 0.5);
+        B.setY(B.getY() + ny * correction * 0.5);
     }
 
     public double[] getCollisionPoints(DominoSimulation next) {
@@ -280,4 +284,20 @@ public class DominoSimulation {
         }
 
     }
+    public void clampAngleAgainst(DominoSimulation next) {
+        // Wir drehen in kleinen Schritten zurück, bis keine Kollision mehr da ist.
+        // Schrittgröße klein halten, sonst "springt" es sichtbar.
+        final double step = 0.0015;  // ~0.086 Grad
+        final int maxIter = 60;
+
+        for (int it = 0; it < maxIter; it++) {
+            double[] hit = this.collisionDetection(next);
+            if (hit == null) return; // keine Überlappung mehr -> fertig
+
+            body.setAngle(body.getAngle() + step);
+
+            updateComFromPivot();
+        }
+    }
+
 }
