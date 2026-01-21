@@ -9,8 +9,8 @@ public class World {
 
     public static final double GROUND_Y = 60.0;
     public static final double GROUND_X = 300.0;
-
-    private static final double ABSTAND = 50.0;
+    public double abstand = 50.0;
+    public String stringAbstand = "50";
 
     private List<DominoSimulation> dominoSimulations = new ArrayList<>();
 
@@ -20,7 +20,7 @@ public class World {
     public World() {
 
         for (int i = 0; i < 10; i++) {
-            double x = GROUND_X + i*ABSTAND;
+            double x = GROUND_X + i*abstand;
             dominoSimulations.add(new DominoSimulation(x));
         }
     }
@@ -43,10 +43,11 @@ public class World {
     public void reset() {
         running = false;
         started = false;
+        abstand = Double.parseDouble(stringAbstand);
 
         for(int i = 0; i < dominoSimulations.size(); i++){
             DominoSimulation dS = dominoSimulations.get(i);
-            double x = GROUND_X + i * ABSTAND; //einstellbarer Abstand zwischen Dominos
+            double x = GROUND_X + i * abstand; //einstellbarer Abstand zwischen Dominos
             dS.reset(x);
         }
     }
@@ -143,7 +144,5 @@ public class World {
             }
         }
     }
-
-
 
 }

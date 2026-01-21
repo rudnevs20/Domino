@@ -2,6 +2,7 @@ module org.example.domino {
     requires javafx.controls;
     requires javafx.fxml;
     requires java.xml;
+    requires java.desktop;
 
     exports org.example.domino.app;
     exports org.example.domino.simulation;
