@@ -256,20 +256,6 @@ public class DominoSimulation {
         body.setOmega(0);
     }
 
-    public void resolvePenetration(DominoSimulation next, double nx, double ny, double depth) {
-        DominoBody A = this.getBody();
-        DominoBody B = this.getBody();
-        double slop = 0.0001;
-
-        double correction = Math.max(depth - slop, 0.0);
-
-        A.setX(A.getX() - nx * correction * 0.5);
-        A.setY(A.getY() - ny * correction * 0.5);
-
-        B.setX(B.getX() + nx * correction * 0.5);
-        B.setY(B.getY() + ny * correction * 0.5);
-    }
-
     public double[] getCollisionPoints(DominoSimulation next) {
         DominoBody A = this.getBody();
         DominoBody B = next.getBody();

@@ -15,8 +15,6 @@ import javafx.stage.Stage;
 import org.example.domino.simulation.World;
 import org.example.domino.view.WorldView;
 
-import java.awt.*;
-
 public class MainApp extends Application {
 
     private static final int WIDTH_WINDOW = 1000;

@@ -1,0 +1,1 @@
+Pfad zur .exe = "...\Domino\Domino\target\jpackage\Domino\Domino.exe"

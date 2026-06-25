@@ -9,8 +9,8 @@ public class World {
 
     public static final double GROUND_Y = 60.0;
     public static final double GROUND_X = 300.0;
-    public double abstand = 50.0;
-    public String stringAbstand = "50";
+    public double abstand = 60.0;
+    public String stringAbstand = "60";
 
     private List<DominoSimulation> dominoSimulations = new ArrayList<>();
 
@@ -124,7 +124,7 @@ public class World {
 
 
                 // (B) Energie-basierte Übergabe: p = Anteil der Rotationsenergie, die weitergeht
-                double p = 0.8; // 80% Energie weiter, 20% Verlust
+                double p = 0.9; // 80% Energie weiter, 20% Verlust
                 double j = A.getMass() * Math.abs(vRel);
                 j *= p;
 
